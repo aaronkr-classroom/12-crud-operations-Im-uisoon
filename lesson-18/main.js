@@ -13,10 +13,8 @@ const express = require("express"), // express를 요청
  * Listing 16.1 (p. 228)
  * 애플리케이션에 Mongoose 설정
  */
-const mongoose = require("mongoose"),
-  Course = require("../models/Course");
+const mongoose = require("mongoose");
 
-// 데이터베이스 연결 설정
 mongoose.connect(
   "mongodb+srv://limuisoon:hXqZU5Pz97N2Rty6@ut-node.mpzg08n.mongodb.net/?retryWrites=true&w=majority&appName=ut-node",
 );
@@ -59,6 +57,12 @@ app.get("/subscribers", subscribersController.getAllSubscribers); // 모든 구�
  * userController.js를 위에서 요청
  */
 // @TODO: index 라우트 생성
+
+app.get(
+  "/users", //경로
+  usersController.index, //DB 요청
+  usersController.indexView //페이지 렌더링
+); // 모든 사용자를 위한 라우트 추가
 
 /**
  * Listing 12.12 (p. 184)
