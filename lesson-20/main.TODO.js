@@ -13,13 +13,19 @@ const express = require("express"), // express를 요청
  * Listing 16.1 (p. 228)
  * 애플리케이션에 Mongoose 설정
  */
-const mongoose = require("mongoose"); // mongoose를 요청
-// 데이터베이스 연결 설정
-mongoose.connect("mongodb://127.0.0.1:27017/ut-nodejs", {
-  useNewUrlParser: true,
+const mongoose = require("mongoose");
+
+mongoose.connect(
+  "mongodb+srv://limuisoon:hXqZU5Pz97N2Rty6@ut-node.mpzg08n.mongodb.net/?retryWrites=true&w=majority&appName=ut-node",
+);
+
+const db = mongoose.connection;
+db.once("open", () => {
+  console.log("Connected to MongoDB");
 });
 
 app.set("port", process.env.PORT || 3000);
+
 
 /**
  * Listing 12.7 (p. 179)

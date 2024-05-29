@@ -37,6 +37,40 @@ module.exports = {
    * userController.js에 액션 생성 추가
    */
   // 폼의 렌더링을 위한 새로운 액션 추가
+  new: (req, res) => {
+    res.render("users/new");
+  },
+  create: (req, res, next) => {
+    let userParams = {
+      name: {
+        first: req.body.first,
+        last: req.body.last,
+      },
+      email: req.body.email,
+      username: req.body.username,
+      phoneNumber: req.body.phoneNumber,
+      password: req.body.password,
+      courses: req.body.courses,
+      profileImg: req.body.profileImg,
+    };
+    User.create(userParams)
+      .then((user) => {
+        console.log(`Created user: ${user.name}`);
+        res.locals.redirect = "/user";
+        res.locals.user = user;
+        next();
+      })
+      .catch((error) => {
+        console.error(`Error creating user: ${error.message}`);
+        next(error);
+      });
+  },
+  redirectView: (req, res, next) => {
+    let path = res.locals.redirect;
+    if (path) res.redirect(path);
+    else next();
+  },
+
   /**
    * @TODO: new, create, redirectView 액션을 객체 리터럴로 묶어 익스포트
    */
@@ -54,4 +88,19 @@ module.exports = {
   /**
    * @TODO: show, showView 액션을 객체 리터럴로 묶어 익스포트
    */
+  show: (req, res, next) => {
+    let userId = req.params.id;
+    User.findById(userId)
+      .then(user => {
+        res.locals.user = user;
+        next();
+      })
+      .catch(error => {
+        console.log(`Error fetching user: ${error.message}`);
+        next(error);
+      });
+  },
+  showView: (req, res) => {
+    res.render("users/show");
+  }
 };
